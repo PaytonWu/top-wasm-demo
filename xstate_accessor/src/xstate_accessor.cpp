@@ -7,7 +7,6 @@
 #include "xbasic/xutility.h"
 #include "xconfig/xconfig_register.h"
 #include "xconfig/xpredefined_configurations.h"
-#include "xmetrics/xmetrics.h"
 #include "xstate_accessor/xerror/xerror.h"
 #include "xvledger/xvledger.h"
 
@@ -22,7 +21,7 @@ constexpr size_t xtop_state_accessor::property_name_min_length;
 static xobject_ptr_t<base::xvbstate_t> state(common::xaccount_address_t const & address) {
     base::xvaccount_t _vaddr(address.to_string());
     xobject_ptr_t<base::xvbstate_t> address_bstate =
-        base::xvchain_t::instance().get_xstatestore()->get_blkstate_store()->get_latest_connectted_block_state(_vaddr, metrics::statestore_access_from_store_bstate);
+        base::xvchain_t::instance().get_xstatestore()->get_blkstate_store()->get_latest_connectted_block_state(_vaddr);
     if (address_bstate == nullptr) {
         xerror("[xtop_state_accessor::get_property] get latest connectted state none, account=%s", address.c_str());
         top::error::throw_error(error::xenum_errc::load_account_state_failed);
@@ -444,7 +443,7 @@ common::xaccount_address_t xtop_state_accessor::account_address() const {
 xobject_ptr_t<base::xvbstate_t> xtop_state_accessor::state(common::xaccount_address_t const & address, std::error_code & ec) const {
     base::xvaccount_t _vaddr(address.to_string());
     xobject_ptr_t<base::xvbstate_t> address_bstate =
-        base::xvchain_t::instance().get_xstatestore()->get_blkstate_store()->get_latest_connectted_block_state(_vaddr, metrics::statestore_access_from_store_bstate);
+        base::xvchain_t::instance().get_xstatestore()->get_blkstate_store()->get_latest_connectted_block_state(_vaddr);
     if (address_bstate == nullptr) {
         xerror("[xtop_state_accessor::get_property] get latest connectted state none, account=%s", address.c_str());
         ec = error::xenum_errc::load_account_state_failed;

@@ -141,20 +141,7 @@ int xtransaction_v2_t::do_write(base::xstream_t & out) {
 }
 
 int xtransaction_v2_t::do_read(base::xstream_t & in) {
-    const int32_t begin_pos = in.size();
-    do_read_without_hash_signature(in);
-    in.read_compact_var(m_authorization);
-    set_digest();
-    set_tx_len(begin_pos - in.size());
-    set_action_type();
-    m_source_action.set_account_addr(m_source_addr);
-    m_target_action.set_account_addr(m_target_addr);
-    if (is_sys_sharding_contract_address(common::xaccount_address_t{get_target_addr()})) {
-        auto tableid = data::account_map_to_table_id(common::xaccount_address_t{get_source_addr()});
-        adjust_target_address(tableid.get_subaddr());
-    }
-    const int32_t end_pos = in.size();
-    return (begin_pos - end_pos);
+    return 0;
 }
 
 #ifdef XENABLE_PSTACK  // tracking memory
@@ -170,11 +157,6 @@ int32_t xtransaction_v2_t::release_ref() {
 #endif
 
 void xtransaction_v2_t::adjust_target_address(uint32_t table_id) {
-    if (m_adjust_target_addr.empty()) {
-        m_adjust_target_addr = make_address_by_prefix_and_subaddr(m_target_addr, table_id).value();
-        xdbg("xtransaction_v2_t::adjust_target_address hash=%s,origin_addr=%s,new_addr=%s",
-            get_digest_hex_str().c_str(), m_target_addr.c_str(), m_adjust_target_addr.c_str());        
-    }
 }
 
 void xtransaction_v2_t::set_digest() {

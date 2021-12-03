@@ -102,7 +102,7 @@ long long from_string<long long>(std::string const & input, std::error_code & ec
         return std::stoll(input);
     } catch (std::invalid_argument const &) {
         ec = std::make_error_code(std::errc::invalid_argument);
-    } catch (std::out_of_range const & eh) {
+    } catch (std::out_of_range const &) {
         ec = std::make_error_code(std::errc::result_out_of_range);
     }
     return {};
@@ -157,7 +157,7 @@ unsigned long from_string<unsigned long>(std::string const & input, std::error_c
         return std::stoul(input);
     } catch (std::invalid_argument const &) {
         ec = std::make_error_code(std::errc::invalid_argument);
-    } catch (std::out_of_range const & eh) {
+    } catch (std::out_of_range const &) {
         ec = std::make_error_code(std::errc::result_out_of_range);
     }
 
@@ -171,7 +171,7 @@ unsigned long long from_string<unsigned long long>(std::string const & input, st
         return std::stoull(input);
     } catch (std::invalid_argument const &) {
         ec = std::make_error_code(std::errc::invalid_argument);
-    } catch (std::out_of_range const & eh) {
+    } catch (std::out_of_range const &) {
         ec = std::make_error_code(std::errc::result_out_of_range);
     }
     return {};

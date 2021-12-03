@@ -5,7 +5,6 @@
 #pragma once
 
 #include <string>
-#include "xdata/xblock.h"
 #include "xbasic/xobject_ptr.h"
 #include "xvledger/xvstate.h"
 #include "xdata/xtransaction.h"

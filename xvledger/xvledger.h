@@ -36,9 +36,6 @@ namespace top
                     }
                     // Wait for lock to be released without generating cache misses
                     while (lock_.load(std::memory_order_relaxed)) {
-                        // Issue X86 PAUSE or ARM YIELD instruction to reduce contention between
-                        // hyper-threads
-                        __builtin_ia32_pause();
                     }
                 }
             }

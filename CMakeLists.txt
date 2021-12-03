@@ -36,12 +36,14 @@ if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
             /diagnostics:caret    # https://docs.microsoft.com/en-us/cpp/build/reference/diagnostics-compiler-diagnostic-options
             /doc
             /wd4634               # XML document comment target: cannot be applied: reason
+            /wd4635
             /utf-8                # https://docs.microsoft.com/en-us/cpp/build/reference/utf-8-set-source-and-executable-character-sets-to-utf-8
             /WL                   # https://docs.microsoft.com/en-us/cpp/build/reference/wl-enable-one-line-diagnostics
     )
 endif()
 
 include_directories(C:/Users/user/Documents/github/vcpkg/installed/x64-windows/include)
+include_directories(D:/Documents/github/vcpkg/installed/x64-windows/include)
 include_directories(./)
 
 add_subdirectory(xbasic)
