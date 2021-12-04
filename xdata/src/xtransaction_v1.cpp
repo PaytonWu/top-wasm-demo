@@ -2,7 +2,7 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include "xbase/xlog.h"
+
 #include "xbase/xutl.h"
 #include "xbase/xcontext.h"
 #include "xutility/xhash.h"
@@ -11,12 +11,7 @@
 #include "xdata/xdata_error.h"
 #include "xdata/xaction_parse.h"
 #include "xdata/xtransaction_v1.h"
-#include "xdata/xtransaction_v2.h"
-#include "xdata/xproperty.h"
-#include "xdata/xchain_param.h"
-#include "xbasic/xversion.h"
 #include "xdata/xdata_defines.h"
-#include "xvledger/xvaccount.h"
 
 #include <cinttypes>
 namespace top { namespace data {

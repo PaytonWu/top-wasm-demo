@@ -6,7 +6,7 @@
 #include "xstate_accessor/xtoken.h"
 
 #include "xbasic/xerror/xerror.h"
-#include "xcontract_common/xerror/xerror.h"
+#include "xstate_accessor/xerror/xerror.h"
 #include "xutility/xhash.h"
 
 #include <cassert>

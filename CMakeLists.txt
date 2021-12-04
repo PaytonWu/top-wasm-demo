@@ -48,7 +48,7 @@ include_directories(./)
 
 add_subdirectory(xbasic)
 add_subdirectory(xcodec)
-add_subdirectory(xconfig)
 add_subdirectory(xcommon)
+add_subdirectory(xconfig)
 add_subdirectory(xdata)
 add_subdirectory(xstate_accessor)

@@ -4,7 +4,6 @@
 
 #pragma once
 
-// TODO(jimmy) #include "xbase/xvledger.h"
 #include "xbasic/xrange.hpp"
 #include "xcommon/xlogic_time.h"
 #include "xconfig/xchain_names.h"
