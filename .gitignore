@@ -1,4 +1,6 @@
 cmake-build-debug
+Cargo.lock
+
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles

@@ -6,7 +6,7 @@
 
 NS_BEG3(top, state_accessor, error)
 
-static char const * errc_to_message(int const errc) noexcept {
+static char const *errc_to_message(int const errc) noexcept {
     switch (static_cast<xerrc_t>(errc)) {
     case xerrc_t::ok:
         return "successful";
@@ -71,6 +71,9 @@ static char const * errc_to_message(int const errc) noexcept {
     case xerrc_t::empty_property_name:
         return "property name is empty";
 
+    case xerrc_t::invalid_state_accessor_handle:
+        return "invalid state accessor handle";
+
     default:
         return "unknown error";
     }
@@ -78,7 +81,7 @@ static char const * errc_to_message(int const errc) noexcept {
 
 class xtop_state_category final : public std::error_category {
 public:
-    const char * name() const noexcept override {
+    const char *name() const noexcept override {
         return "state";
     }
 
@@ -86,6 +89,7 @@ public:
         return errc_to_message(errc);
     }
 };
+
 using xstate_category_t = xtop_state_category;
 
 std::error_code make_error_code(xerrc_t errc) noexcept {
@@ -96,7 +100,7 @@ std::error_condition make_error_condition(xerrc_t errc) noexcept {
     return std::error_condition{static_cast<int>(errc), state_category()};
 }
 
-std::error_category const & state_category() {
+std::error_category const &state_category() {
     static xstate_category_t category;
     return category;
 }

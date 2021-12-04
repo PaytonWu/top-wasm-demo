@@ -32,11 +32,11 @@ enum class xenum_errc : uint16_t {
     property_not_changed,
     empty_property_name,
     get_binlog_failed,
-
     property_id_conversion_invalid,
-
     // capability errors
     load_account_state_failed,
+
+    invalid_state_accessor_handle,
 };
 using xerrc_t = xenum_errc;
 
