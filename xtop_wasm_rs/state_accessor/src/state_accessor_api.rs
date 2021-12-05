@@ -1,9 +1,4 @@
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct StateAccessor {
-    pub unused_handle: *mut ::std::os::raw::c_void,
-}
-pub type StateAccessorHandle = *mut StateAccessor;
+use super::StateAccessorHandle;
 
 extern "C" {
     pub fn withdraw(
@@ -13,4 +8,8 @@ extern "C" {
         symbol: *const ::std::os::raw::c_char,
         ec: *mut ::std::os::raw::c_int,
     ) -> u64;
+}
+
+pub trait StateAccessorApi {
+    fn
 }
