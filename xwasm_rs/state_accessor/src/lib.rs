@@ -1,5 +1,5 @@
-mod state_accessor_api;
-mod state_accessor_handle;
+mod state_accessor;
+mod traits;
 
-pub use state_accessor_api::*;
-pub use state_accessor_handle::*;
+pub use traits::*;
+pub use state_accessor::*;

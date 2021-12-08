@@ -1,7 +1,7 @@
 use std::string::String;
 use std::convert::From;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Symbol(String);
 
 impl Symbol {
