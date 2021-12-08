@@ -1,4 +1,6 @@
 use super::StateAccessorHandle;
+use types::symbol::Symbol;
+use types::token::Token;
 
 extern "C" {
     pub fn withdraw(
@@ -11,5 +13,5 @@ extern "C" {
 }
 
 pub trait StateAccessorApi {
-    fn
+    fn withdraw(state_accessor_handle: StateAccessorHandle, property_name: &str, amount: u64, symbol: &Symbol) -> Token;
 }

@@ -8,7 +8,7 @@ pub struct Token {
 
 impl Token {
     pub fn new(amount : u64) -> Self {
-        Token{amount_: amount, symbol_: Symbol::new()}
+        Token{amount_: amount, symbol_: Symbol::default()}
     }
 
     pub fn amount(&self) -> u64 {

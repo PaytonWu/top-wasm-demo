@@ -9,12 +9,20 @@ impl Symbol {
         Symbol(String::new())
     }
 
+    pub const fn default() -> Self {
+        Symbol(String::new())
+    }
+
     pub fn value(&self) -> &String {
         &self.0
     }
 
-    pub fn is_top(&self) -> bool{
+    pub fn is_top(&self) -> bool {
         self.0.is_empty()
+    }
+
+    pub fn is_tstd(&self) -> bool {
+        !self.is_top()
     }
 }
 
