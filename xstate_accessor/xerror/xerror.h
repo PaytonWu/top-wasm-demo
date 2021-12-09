@@ -37,6 +37,7 @@ enum class xenum_errc : uint16_t {
     load_account_state_failed,
 
     invalid_state_accessor_handle,
+    invalid_property_name,
 };
 using xerrc_t = xenum_errc;
 

@@ -1,5 +1,6 @@
 cmake-build-debug
 Cargo.lock
+.idea
 
 CMakeLists.txt.user
 CMakeCache.txt

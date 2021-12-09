@@ -74,6 +74,9 @@ static char const *errc_to_message(int const errc) noexcept {
     case xerrc_t::invalid_state_accessor_handle:
         return "invalid state accessor handle";
 
+    case xerrc_t::invalid_property_name:
+        return "invalid property name";
+
     default:
         return "unknown error";
     }
