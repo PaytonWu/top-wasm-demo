@@ -1,4 +1,5 @@
-use std::os::raw::c_void;
+use std::os::raw::{c_char, c_int, c_void};
+use super::DataSpan;
 
 extern "C" {
     pub fn withdraw(
@@ -9,5 +10,5 @@ extern "C" {
         ec: *mut ::std::os::raw::c_int,
     ) -> u64;
 
-    pub fn xproperty_object_t * get_property(void * state_accessor_handle, char const * property_name, top::state_accessor::properties::xproperty_type_t property_type, int * ec);
+    pub fn get_property_serialized(state_accessor_handle: *mut c_void, property_name: *const c_char, ec: *mut c_int) -> DataSpan;
 }

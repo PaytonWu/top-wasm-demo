@@ -45,6 +45,7 @@ enum class xenum_property_type {
     int16,
     int32,
     int64,
+    index,
     token,
     nonce,
     src_code,

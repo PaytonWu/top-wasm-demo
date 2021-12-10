@@ -140,7 +140,7 @@ public:
     /// @param ec Log the error code in the operation.
     template <properties::xproperty_type_t PropertyTypeV, typename std::enable_if<PropertyTypeV == properties::xproperty_type_t::map ||
                                                                                   PropertyTypeV == properties::xproperty_type_t::deque>::type * = nullptr>
-    void set_property_cell_value(properties::xtypeless_property_identifier_t const & proprty_id,
+    void set_property_cell_value(properties::xtypeless_property_identifier_t const & property_id,
                                  typename properties::xkey_type_of_t<PropertyTypeV>::type const & key,
                                  typename properties::xvalue_type_of_t<PropertyTypeV>::type const & value,
                                  std::error_code & ec);
