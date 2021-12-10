@@ -32,27 +32,10 @@ namespace top
         public:
             using key_value = std::pair<key, value>;
 
-            xlru_cache(size_t max_size) :
-                m_max_size(max_size) {
-            }
-
             virtual ~xlru_cache() {
                 for(auto& pair : m_item_list) {
                     delete_value(pair.second);
                 }
-            }
-
-            void put(const key& k, const value& v) {
-                std::lock_guard<std::mutex> lock(m_mutex);
-                auto it = m_item_map.find(k);
-                if (it != m_item_map.end()) {
-                    delete_value(it->second->second);
-                    m_item_list.erase(it->second);
-                    m_item_map.erase(it);
-                }
-                m_item_list.push_front(std::make_pair(k, v));
-                m_item_map.insert(std::make_pair(k, m_item_list.begin()));
-                clean();
             }
 
             bool get(const key& k, value& v) {
@@ -70,12 +53,6 @@ namespace top
             bool exist(const key& k) {
                 std::lock_guard<std::mutex> lock(m_mutex);
                 return (m_item_map.count(k) > 0);
-            }
-
-            void set_max_size(uint32_t max_size) {
-                std::lock_guard<std::mutex> lock(m_mutex);
-                m_max_size = max_size;
-                clean();
             }
 
             void clear() {

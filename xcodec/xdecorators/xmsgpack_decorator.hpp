@@ -25,7 +25,7 @@ struct xtop_msgpack_decorator final
 
     static
     xbyte_buffer_t
-    encode(message_type const & message) {
+    encode(message_type const &) {
         try {
             // ::msgpack::sbuffer buffer;
             // ::msgpack::pack(buffer, message);
@@ -38,7 +38,7 @@ struct xtop_msgpack_decorator final
 
     static
     message_type
-    decode(xbyte_buffer_t const & in) {
+    decode(xbyte_buffer_t const &) {
         try {
             //auto object_handle = msgpack::unpack(reinterpret_cast<char const *>(in.data()), in.size(), nullptr);
             //auto object = object_handle.get();

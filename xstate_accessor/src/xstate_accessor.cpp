@@ -55,7 +55,7 @@ xtop_state_accessor::xtop_state_accessor(common::xaccount_address_t const & acco
   : bstate_owned_{top::state_accessor::state(account_address)}, bstate_{make_observer(bstate_owned_.get())}, canvas_{make_object_ptr<base::xvcanvas_t>()} {
 }
 
-xtop_state_accessor::xtop_state_accessor(common::xaccount_address_t const & account_address, uint64_t const height)
+xtop_state_accessor::xtop_state_accessor(common::xaccount_address_t const & account_address, uint64_t height)
   : bstate_owned_{top::state_accessor::state(account_address, height)}, bstate_{make_observer(bstate_owned_.get())}, canvas_{make_object_ptr<base::xvcanvas_t>()} {
 }
 

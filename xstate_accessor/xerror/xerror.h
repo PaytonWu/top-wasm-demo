@@ -38,6 +38,7 @@ enum class xenum_errc : uint16_t {
 
     invalid_state_accessor_handle,
     invalid_property_name,
+    invalid_property_value,
 };
 using xerrc_t = xenum_errc;
 

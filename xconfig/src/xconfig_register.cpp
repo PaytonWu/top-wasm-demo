@@ -204,55 +204,55 @@ bool xconfig_register_t::set<std::string>(const std::string& key, std::string va
 }
 
 template<>
-bool xconfig_register_t::set(const std::string& key, bool value) {
+bool xconfig_register_t::set(const std::string& key, bool) {
     std::string val;// = check_cast<std::string>(value);
     return set<std::string>(key, val);
 }
 
 template<>
-bool xconfig_register_t::set(const std::string& key, int16_t value) {
+bool xconfig_register_t::set(const std::string& key, int16_t) {
     std::string val;// = check_cast<std::string>(value);
     return set<std::string>(key, val);
 }
 
 template<>
-bool xconfig_register_t::set(const std::string& key, uint16_t value) {
+bool xconfig_register_t::set(const std::string& key, uint16_t) {
     std::string val;// = check_cast<std::string>(value);
     return set<std::string>(key, val);
 }
 
 template<>
-bool xconfig_register_t::set(const std::string& key, int32_t value) {
+bool xconfig_register_t::set(const std::string& key, int32_t) {
     std::string val;// = check_cast<std::string>(value);
     return set<std::string>(key, val);
 }
 
 template<>
-bool xconfig_register_t::set(const std::string& key, uint32_t value) {
+bool xconfig_register_t::set(const std::string& key, uint32_t) {
     std::string val;// = check_cast<std::string>(value);
     return set<std::string>(key, val);
 }
 
 template<>
-bool xconfig_register_t::set(const std::string& key, int64_t value) {
+bool xconfig_register_t::set(const std::string& key, int64_t) {
     std::string val;// = check_cast<std::string>(value);
     return set<std::string>(key, val);
 }
 
 template<>
-bool xconfig_register_t::set(const std::string& key, uint64_t value) {
+bool xconfig_register_t::set(const std::string& key, uint64_t) {
     std::string val;// = check_cast<std::string>(value);
     return set<std::string>(key, val);
 }
 
 template<>
-bool xconfig_register_t::set(const std::string& key, float value) {
+bool xconfig_register_t::set(const std::string& key, float) {
     std::string val;// = check_cast<std::string>(value);
     return set<std::string>(key, val);
 }
 
 template<>
-bool xconfig_register_t::set(const std::string& key, double value) {
+bool xconfig_register_t::set(const std::string& key, double) {
     std::string val;// = check_cast<std::string>(value);
     return set<std::string>(key, val);
 }
@@ -291,7 +291,7 @@ bool xconfig_register_t::get<bool>(const std::string& key, bool& value)  const {
 }
 
 template<>
-bool xconfig_register_t::get(const std::string& key, int16_t& value) const {
+bool xconfig_register_t::get(const std::string& key, int16_t&) const {
     std::string str_value;
     if (!get<std::string>(key, str_value)) {
         return false;
@@ -307,7 +307,7 @@ bool xconfig_register_t::get(const std::string& key, int16_t& value) const {
 }
 
 template<>
-bool xconfig_register_t::get(const std::string& key, uint16_t& value) const {
+bool xconfig_register_t::get(const std::string& key, uint16_t&) const {
     std::string str_value;
     if (!get<std::string>(key, str_value)) {
         return false;

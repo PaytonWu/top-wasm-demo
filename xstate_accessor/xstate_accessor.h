@@ -44,7 +44,7 @@ public:
 
 private:
     explicit xtop_state_accessor(common::xaccount_address_t const & account_address);
-    explicit xtop_state_accessor(common::xaccount_address_t const & account_address, uint64_t const height);
+    explicit xtop_state_accessor(common::xaccount_address_t const & account_address, uint64_t height);
 
 public:
     /// @brief Construct an xstate_accessor_t object against the specified account. Throws xtop_error_t when any error occurs.

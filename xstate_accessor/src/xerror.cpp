@@ -77,6 +77,9 @@ static char const *errc_to_message(int const errc) noexcept {
     case xerrc_t::invalid_property_name:
         return "invalid property name";
 
+    case xerrc_t::invalid_property_value:
+        return "invalid property value";
+
     default:
         return "unknown error";
     }

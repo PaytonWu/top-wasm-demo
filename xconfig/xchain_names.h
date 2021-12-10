@@ -11,6 +11,4 @@ NS_BEG2(top, config)
 XINLINE_CONSTEXPR char const * chain_name_mainnet{"new_horizons"};
 XINLINE_CONSTEXPR char const * chain_name_testnet{"galileo"};
 
-int to_chainid(std::string const & chain_name);
-
 NS_END2

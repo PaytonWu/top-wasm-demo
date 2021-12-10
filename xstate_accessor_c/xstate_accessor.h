@@ -13,10 +13,19 @@
 extern "C" {
 #endif
 
-uint64_t withdraw(void * const state_accessor_handle, char const * const property_name, uint64_t const amount, char const * const symbol, int * ec);
-void deposit(void * const state_accessor_handle, char const * const property_name, uint64_t amount, char const * const symbol, int * ec);
+typedef struct {
+    void * property_value;
+    top::state_accessor::properties::xproperty_type_t property_type;
+} xproperty_object_t;
 
-void create_property(char const * const property_name, top::state_accessor::properties::xproperty_type_t property_type, int * ec);
+void free_property(xproperty_object_t * property);
+
+uint64_t withdraw(void * state_accessor_handle, char const * property_name, uint64_t amount, char const * symbol, int * ec);
+void deposit(void * state_accessor_handle, char const * property_name, uint64_t amount, char const * symbol, int * ec);
+
+void create_property(void * state_accessor_handle, char const * property_name, top::state_accessor::properties::xproperty_type_t property_type, int * ec);
+
+xproperty_object_t get_property(void * state_accessor_handle, char const * property_name, top::state_accessor::properties::xproperty_type_t property_type, int * ec);
 
 #if defined(__cplusplus)
 }
