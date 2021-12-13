@@ -1,5 +1,5 @@
 use super::properties::PropertyType;
-use std::os::raw::{c_void, c_uchar, c_ulonglong};
+use std::os::raw::{c_void, c_uchar};
 
 #[repr(C)]
 pub struct PropertyObject{
@@ -8,7 +8,7 @@ pub struct PropertyObject{
 }
 
 #[repr(C)]
-pub struct DataSpan {
+pub struct BytesDataSpan {
     ptr: *mut c_uchar,
-    size: c_ulonglong
+    size: u64
 }

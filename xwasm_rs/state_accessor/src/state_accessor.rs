@@ -3,6 +3,7 @@ use std::os::raw::c_int;
 use types::fundamental::{Symbol, Token};
 use crate::StateAccessorTrait;
 use std::ffi::{CString};
+use ffi::state_accessor::BytesDataSpan;
 
 #[repr(C)]
 #[derive(Debug)]
@@ -30,5 +31,9 @@ impl StateAccessorTrait for StateAccessor {
                 Token::new(amount, symbol.clone())
             }
         }
+    }
+
+    fn get_property_bytes(&self, property_name: &str) -> BytesDataSpan {
+        unimplemented!()
     }
 }

@@ -12,14 +12,16 @@
 
 using namespace top;
 
-bool empty(xdata_t const * data) noexcept {
+bool empty(xbytes_data_t const * data) noexcept {
     return data == nullptr || data->size == 0;
 }
 
-void free_property(xproperty_data_t * property) {
-    if (property == nullptr) {
+void free_bytes(xbytes_data_t * data) {
+    if (data == nullptr) {
         return;
     }
+
+    delete[] data;
 }
 
 uint64_t withdraw(void * state_accessor_handle, char const * property_name, uint64_t const amount, char const * symbol, int * ec) {
@@ -144,10 +146,49 @@ void create_property(void * state_accessor_handle, char const * property_name, t
     }
 }
 
-xdata_t get_property_serialized(void * state_accessor_handle, char const * property_name, int * ec) {
+#define DEFINE_GET_INT_PROPERTY(INT) \
+INT##_t get_property_##INT(void * state_accessor_handle, char const * property_name, int * ec) { \
+    using namespace top::state_accessor;                                                         \
+    INT##_t ret{0};                  \
+                                     \
+    if (state_accessor_handle == nullptr) {                                                      \
+        if (ec != nullptr) {         \
+            *ec = static_cast<int>(top::state_accessor::error::xerrc_t::invalid_state_accessor_handle); \
+        }                            \
+        return ret;                  \
+    }                                \
+                                     \
+    if (property_name == nullptr) {  \
+        if (ec != nullptr) {         \
+            *ec = static_cast<int>(state_accessor::error::xerrc_t::invalid_property_name);       \
+        }                            \
+        return ret;                  \
+    }                                \
+                                     \
+    auto * state_accessor = reinterpret_cast<top::state_accessor::xstate_accessor_t *>(state_accessor_handle); \
+    state_accessor::properties::xtypeless_property_identifier_t property_id{property_name, state_accessor::properties::xproperty_category_t::user}; \
+    std::error_code e;               \
+                                     \
+    ret = state_accessor->get_property<properties::xproperty_type_t::INT>(property_id, e);       \
+    if (e) {                         \
+        if (ec != nullptr) {         \
+            *ec = e.value();         \
+        }                            \
+        return ret;                  \
+    }                                \
+                                     \
+    return ret;                      \
+}
+
+DEFINE_GET_INT_PROPERTY(int64)
+DEFINE_GET_INT_PROPERTY(uint64)
+
+#undef DEFINE_GET_INT_PROPERTY
+
+xbytes_data_t get_property_bytes(void * state_accessor_handle, char const * property_name, int * ec) {
     using namespace top::state_accessor;
 
-    xdata_t ret;
+    xbytes_data_t ret;
     ret.ptr = nullptr;
     ret.size = 0;
 
@@ -184,7 +225,7 @@ xdata_t get_property_serialized(void * state_accessor_handle, char const * prope
     return ret;
 }
 
-void set_property(void * state_accessor_handle, char const * property_name, xdata_t const * property_data, int * ec) {
+void set_property_bytes(void * state_accessor_handle, char const * property_name, xbytes_data_t const * property_data, int * ec) {
     using namespace top::state_accessor;
 
     if (state_accessor_handle == nullptr) {

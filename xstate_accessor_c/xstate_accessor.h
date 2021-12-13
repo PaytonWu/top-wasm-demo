@@ -16,20 +16,21 @@ extern "C" {
 typedef struct {
     uint8_t * ptr;
     uint64_t size;
-} xdata_t;
+} xbytes_data_t;
 
-bool empty(xdata_t const * data) noexcept;
+
+bool empty(xbytes_data_t const * data) noexcept;
 
 typedef struct {
-    xdata_t property_value;
+    xbytes_data_t property_value;
     top::state_accessor::properties::xproperty_type_t property_type;
 } xproperty_data_t;
 
-void free_property(xproperty_data_t * property);
+void free_bytes(xbytes_data_t * data);
 
 typedef struct {
-    xdata_t index;
-    xdata_t value;
+    xbytes_data_t index;
+    xbytes_data_t value;
     top::state_accessor::properties::xproperty_type_t index_type;
     top::state_accessor::properties::xproperty_type_t value_type;
 } xproperty_pair_data_t;
@@ -58,19 +59,33 @@ void deposit(void * state_accessor_handle, char const * property_name, uint64_t 
 /// @param ec Error code.
 void create_property(void * state_accessor_handle, char const * property_name, top::state_accessor::properties::xproperty_type_t property_type, int * ec);
 
+#define DECLARE_GET_INT_PROPERTY(INT) \
+INT##_t get_property_##INT(void * state_accessor_handle, char const * property_name, int * ec)
+
+DECLARE_GET_INT_PROPERTY(uint8);
+DECLARE_GET_INT_PROPERTY(uint16);
+DECLARE_GET_INT_PROPERTY(uint32);
+DECLARE_GET_INT_PROPERTY(uint64);
+DECLARE_GET_INT_PROPERTY(int8);
+DECLARE_GET_INT_PROPERTY(int16);
+DECLARE_GET_INT_PROPERTY(int32);
+DECLARE_GET_INT_PROPERTY(int64);
+
+#undef DECLARE_GET_INT_PROPERTY
+
 /// @brief Get the property data in the serialized form.
 /// @param state_accessor_handle The pointer to the state accessor instance.
 /// @param property_name Name of the property to be queried.
 /// @param ec Error code.
 /// @return The property data.
-xdata_t get_property_serialized(void * state_accessor_handle, char const * property_name, int * ec);
+xbytes_data_t get_property_bytes(void * state_accessor_handle, char const * property_name, int * ec);
 
 /// @brief Update property.
 /// @param state_accessor_handle The pointer to the state accessor instance.
 /// @param property_name Name of the property to be updated.
 /// @param property_data Data to be set on the property.
 /// @param ec Error code.
-void set_property_serialized(void * state_accessor_handle, char const * property_name, xdata_t const * property_data, int * ec);
+void set_property_bytes(void * state_accessor_handle, char const * property_name, xbytes_data_t const * property_data, int * ec);
 
 /// @brief Update value at specified index.
 /// @param state_accessor_handle The pointer to the state accessor instance.
