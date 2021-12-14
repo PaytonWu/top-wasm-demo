@@ -62,13 +62,13 @@ void create_property(void * state_accessor_handle, char const * property_name, t
 #define DECLARE_GET_INT_PROPERTY(INT) \
 INT##_t get_property_##INT(void * state_accessor_handle, char const * property_name, int * ec)
 
-DECLARE_GET_INT_PROPERTY(uint8);
-DECLARE_GET_INT_PROPERTY(uint16);
-DECLARE_GET_INT_PROPERTY(uint32);
+// DECLARE_GET_INT_PROPERTY(uint8);
+// DECLARE_GET_INT_PROPERTY(uint16);
+// DECLARE_GET_INT_PROPERTY(uint32);
 DECLARE_GET_INT_PROPERTY(uint64);
-DECLARE_GET_INT_PROPERTY(int8);
-DECLARE_GET_INT_PROPERTY(int16);
-DECLARE_GET_INT_PROPERTY(int32);
+// DECLARE_GET_INT_PROPERTY(int8);
+// DECLARE_GET_INT_PROPERTY(int16);
+// DECLARE_GET_INT_PROPERTY(int32);
 DECLARE_GET_INT_PROPERTY(int64);
 
 #undef DECLARE_GET_INT_PROPERTY
