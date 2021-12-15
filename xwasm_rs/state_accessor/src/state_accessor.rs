@@ -3,7 +3,7 @@ use std::os::raw::c_int;
 use types::fundamental::{Symbol, Token};
 use crate::StateAccessorTrait;
 use std::ffi::{CString};
-use ffi::state_accessor::BytesDataSpan;
+use ffi::state_accessor::Bytes;
 // use std::error::Error;
 use std::io::{Error, ErrorKind};
 
@@ -33,7 +33,7 @@ impl StateAccessorTrait for StateAccessor {
             }
     }
 
-    fn get_property_bytes(&self, property_name: &str) -> Result<BytesDataSpan, Error> {
+    fn get_property_bytes(&self, property_name: &str) -> Result<Bytes, Error> {
         let mut ec: c_int = 0;
         let property_name_string = CString::new(property_name)?;
         let bytes = unsafe { ffi::state_accessor::get_property_bytes(self.handle, property_name_string.as_ptr(), &mut ec) };
@@ -44,10 +44,10 @@ impl StateAccessorTrait for StateAccessor {
         }
     }
 
-    fn set_property_bytes(&self, property_name: &str, bytes: &BytesDataSpan) -> Result<(), Error>{
+    fn set_property_bytes(&self, property_name: &str, bytes: &Bytes) -> Result<(), Error>{
         let mut ec: c_int = 0;
         let property_name_string = CString::new(property_name)?;
-        unsafe { ffi::state_accessor::set_property_bytes(self.handle, property_name_string.as_ptr(), bytes as *const BytesDataSpan, &mut ec) };
+        unsafe { ffi::state_accessor::set_property_bytes(self.handle, property_name_string.as_ptr(), bytes as *const Bytes, &mut ec) };
         if ec != 0 {
             Err(Error::new(ErrorKind::Other, "ffi::state_accessor::set_property_bytes"))
         } else {
