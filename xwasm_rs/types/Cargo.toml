@@ -7,3 +7,4 @@ edition = "2021"
 
 [dependencies]
 ffi = { path="../ffi" }
+libc = "0.2"

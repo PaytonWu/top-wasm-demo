@@ -1,2 +1,2 @@
-pub type Bytes = ffi::state_accessor::Bytes;
+pub type CBytes = ffi::state_accessor::CBytes;
 

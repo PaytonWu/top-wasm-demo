@@ -1,4 +1,6 @@
+use std::ffi::CStr;
 use std::fmt;
+use ffi::state_accessor::CErrorCode;
 
 #[derive(Debug, Clone)]
 pub struct Error {
@@ -32,4 +34,11 @@ impl fmt::Display for Error {
 }
 
 impl std::error::Error for Error {
+}
+
+impl From<&CErrorCode> for Error {
+    fn from(ec: &CErrorCode) -> Self {
+
+        Error::new(ec.value, unsafe {CStr::from_ptr(ec.message)}.to_str().unwrap_or(""), unsafe {CStr::from_ptr(ec.category)}.to_str().unwrap_or(""))
+    }
 }

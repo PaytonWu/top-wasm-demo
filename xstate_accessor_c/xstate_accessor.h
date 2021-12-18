@@ -18,7 +18,6 @@ typedef struct {
     uint64_t size;
 } xbytes_data_t;
 
-
 bool empty(xbytes_data_t const * data) noexcept;
 
 typedef struct {
@@ -35,6 +34,21 @@ typedef struct {
     top::state_accessor::properties::xproperty_type_t value_type;
 } xproperty_pair_data_t;
 
+typedef struct {
+    char const * ptr;
+    uint64_t size;
+} xstring_slice_t;
+
+typedef struct {
+    int32_t value;
+    char const * message;
+    char const * category;
+} xerror_code_t;
+
+void free_error_code(xerror_code_t * ec);
+
+xerror_code_t convert_std_error_code(std::error_code const & ec);
+
 /// @brief Withdraw token.
 /// @param state_accessor_handle The pointer to the state accessor instance.
 /// @param property_name Name of the token property.
@@ -42,7 +56,7 @@ typedef struct {
 /// @param symbol The symbol of the token.
 /// @param ec Error code.
 /// @return The amount withdrawn.
-uint64_t withdraw(void * state_accessor_handle, char const * property_name, uint64_t amount, char const * symbol, int * ec);
+uint64_t withdraw(void * state_accessor_handle, char const * property_name, uint64_t amount, char const * symbol, xerror_code_t * ec);
 
 /// @brief Deposit token.
 /// @param state_accessor_handle The pointer to the state accessor instance.
@@ -50,17 +64,17 @@ uint64_t withdraw(void * state_accessor_handle, char const * property_name, uint
 /// @param amount The amount to be deposited.
 /// @param symbol The symbol of the token.
 /// @param ec Error code.
-void deposit(void * state_accessor_handle, char const * property_name, uint64_t amount, char const * symbol, int * ec);
+void deposit(void * state_accessor_handle, char const * property_name, uint64_t amount, char const * symbol, xerror_code_t * ec);
 
 /// @brief Create the property.
 /// @param state_accessor_handle The pointer to the state accessor instance.
 /// @param property_name Name of the property to be created.
 /// @param property_type Type of the property to be created.
 /// @param ec Error code.
-void create_property(void * state_accessor_handle, char const * property_name, top::state_accessor::properties::xproperty_type_t property_type, int * ec);
+void create_property(void * state_accessor_handle, char const * property_name, top::state_accessor::properties::xproperty_type_t property_type, xerror_code_t * ec);
 
 #define DECLARE_GET_INT_PROPERTY(INT) \
-INT##_t get_property_##INT(void * state_accessor_handle, char const * property_name, int * ec)
+INT##_t get_property_##INT(void * state_accessor_handle, char const * property_name, xerror_code_t * ec)
 
 // DECLARE_GET_INT_PROPERTY(uint8);
 // DECLARE_GET_INT_PROPERTY(uint16);
@@ -78,14 +92,14 @@ DECLARE_GET_INT_PROPERTY(int64);
 /// @param property_name Name of the property to be queried.
 /// @param ec Error code.
 /// @return The property data.
-xbytes_data_t get_property_bytes(void * state_accessor_handle, char const * property_name, int * ec);
+xbytes_data_t get_property_bytes(void * state_accessor_handle, char const * property_name, xerror_code_t * ec);
 
 /// @brief Update property.
 /// @param state_accessor_handle The pointer to the state accessor instance.
 /// @param property_name Name of the property to be updated.
 /// @param property_data Data to be set on the property.
 /// @param ec Error code.
-void set_property_bytes(void * state_accessor_handle, char const * property_name, xbytes_data_t const * property_data, int * ec);
+void set_property_bytes(void * state_accessor_handle, char const * property_name, xbytes_data_t const * property_data, xerror_code_t * ec);
 
 /// @brief Update value at specified index.
 /// @param state_accessor_handle The pointer to the state accessor instance.

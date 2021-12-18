@@ -9,6 +9,7 @@
 #include "xstate_accessor/xstate_accessor.h"
 
 #include <cassert>
+#include <cstring>
 
 using namespace top;
 
@@ -24,10 +25,38 @@ void free_bytes(xbytes_data_t * data) {
     delete[] data;
 }
 
-uint64_t withdraw(void * state_accessor_handle, char const * property_name, uint64_t const amount, char const * symbol, int * ec) {
+template <typename ToErrorCodeT, typename FromErrorCodeT = std::error_code>
+void convert_to(FromErrorCodeT const & from, ToErrorCodeT & to);
+
+template <>
+void convert_to(std::error_code const & from, xerror_code_t & to) {
+    assert(from);
+    assert(to.value == 0);
+
+    to.value = from.value();
+    to.category = from.category().name();
+
+    to.message = new char[from.message().size() + 1];
+    auto * ptr = const_cast<char *>(to.message);
+    std::memcpy(ptr, from.message().data(), from.message().size());
+    ptr[from.message().size()] = '\0';
+}
+
+void free_error_code(xerror_code_t * ec) {
+    if (ec == nullptr) {
+        return;
+    }
+
+    ec->category = nullptr;
+
+    delete[] ec->message;
+    ec->message = nullptr;
+}
+
+uint64_t withdraw(void * state_accessor_handle, char const * property_name, uint64_t const amount, char const * symbol, xerror_code_t * ec) {
     if (state_accessor_handle == nullptr) {
         if (ec != nullptr) {
-            *ec = static_cast<int>(top::state_accessor::error::xerrc_t::invalid_state_accessor_handle);
+            convert_to(make_error_code(top::state_accessor::error::xerrc_t::invalid_state_accessor_handle), *ec);
         }
 
         return 0;
@@ -35,7 +64,7 @@ uint64_t withdraw(void * state_accessor_handle, char const * property_name, uint
 
     if (property_name == nullptr) {
         if (ec != nullptr) {
-            *ec = static_cast<int>(state_accessor::error::xerrc_t::invalid_property_name);
+            convert_to(make_error_code(state_accessor::error::xerrc_t::invalid_property_name), *ec);
         }
 
         return 0;
@@ -43,7 +72,7 @@ uint64_t withdraw(void * state_accessor_handle, char const * property_name, uint
 
     if (amount == 0) {
         if (ec != nullptr) {
-            *ec = static_cast<int>(state_accessor::error::xerrc_t::invalid_property_value);
+            convert_to(make_error_code(state_accessor::error::xerrc_t::invalid_property_value), *ec);
         }
 
         return 0;
@@ -58,7 +87,7 @@ uint64_t withdraw(void * state_accessor_handle, char const * property_name, uint
     if (e) {
         assert(token.invalid());
         if (ec != nullptr) {
-            *ec = e.value();
+            convert_to(e, *ec);
         }
 
         return 0;
@@ -69,10 +98,10 @@ uint64_t withdraw(void * state_accessor_handle, char const * property_name, uint
     return ret;
 }
 
-void deposit(void * state_accessor_handle, char const * property_name, uint64_t amount, char const * symbol, int * ec) {
+void deposit(void * state_accessor_handle, char const * property_name, uint64_t amount, char const * symbol, xerror_code_t * ec) {
     if (state_accessor_handle == nullptr) {
         if (ec != nullptr) {
-            *ec = static_cast<int>(top::state_accessor::error::xerrc_t::invalid_state_accessor_handle);
+            convert_to(make_error_code(top::state_accessor::error::xerrc_t::invalid_state_accessor_handle), *ec);
         }
 
         return;
@@ -80,7 +109,7 @@ void deposit(void * state_accessor_handle, char const * property_name, uint64_t 
 
     if (property_name == nullptr) {
         if (ec != nullptr) {
-            *ec = static_cast<int>(state_accessor::error::xerrc_t::invalid_property_name);
+            convert_to(make_error_code(state_accessor::error::xerrc_t::invalid_property_name), *ec);
         }
 
         return;
@@ -88,7 +117,7 @@ void deposit(void * state_accessor_handle, char const * property_name, uint64_t 
 
     if (amount == 0) {
         if (ec != nullptr) {
-            *ec = static_cast<int>(state_accessor::error::xerrc_t::invalid_property_value);
+            convert_to(make_error_code(state_accessor::error::xerrc_t::invalid_property_value), *ec);
         }
 
         return;
@@ -102,17 +131,17 @@ void deposit(void * state_accessor_handle, char const * property_name, uint64_t 
     state_accessor->deposit(property_id, state_accessor::xtoken_t{ amount, symbol == nullptr ? common::xsymbol_t{} : common::xsymbol_t{symbol} }, e);
     if (e) {
         if (ec != nullptr) {
-            *ec = e.value();
+            convert_to(e, *ec);
         }
 
         return;
     }
 }
 
-void create_property(void * state_accessor_handle, char const * property_name, top::state_accessor::properties::xproperty_type_t property_type, int * ec) {
+void create_property(void * state_accessor_handle, char const * property_name, top::state_accessor::properties::xproperty_type_t property_type, xerror_code_t * ec) {
     if (state_accessor_handle == nullptr) {
         if (ec != nullptr) {
-            *ec = static_cast<int>(top::state_accessor::error::xerrc_t::invalid_state_accessor_handle);
+            convert_to(make_error_code(top::state_accessor::error::xerrc_t::invalid_state_accessor_handle), *ec);
         }
 
         return;
@@ -120,7 +149,7 @@ void create_property(void * state_accessor_handle, char const * property_name, t
 
     if (property_name == nullptr) {
         if (ec != nullptr) {
-            *ec = static_cast<int>(state_accessor::error::xerrc_t::invalid_property_name);
+            convert_to(make_error_code(state_accessor::error::xerrc_t::invalid_property_name), *ec);
         }
 
         return;
@@ -128,7 +157,7 @@ void create_property(void * state_accessor_handle, char const * property_name, t
 
     if (property_type == top::state_accessor::properties::xproperty_type_t::invalid) {
         if (ec != nullptr) {
-            *ec = static_cast<int>(state_accessor::error::xerrc_t::invalid_property_type);
+            convert_to(make_error_code(state_accessor::error::xerrc_t::invalid_property_type), *ec);
         }
 
         return;
@@ -141,38 +170,38 @@ void create_property(void * state_accessor_handle, char const * property_name, t
     state_accessor->create_property(property_id, e);
     if (e) {
         if (ec != nullptr) {
-            *ec = e.value();
+            convert_to(e, *ec);
         }
     }
 }
 
 #define DEFINE_GET_INT_PROPERTY(INT) \
-INT##_t get_property_##INT(void * state_accessor_handle, char const * property_name, int * ec) { \
-    using namespace top::state_accessor;                                                         \
+INT##_t get_property_##INT(void * state_accessor_handle, char const * property_name, xerror_code_t * ec) { \
+    using namespace top::state_accessor;                                                                   \
     INT##_t ret{0};                  \
                                      \
-    if (state_accessor_handle == nullptr) {                                                      \
+    if (state_accessor_handle == nullptr) {                                                                \
         if (ec != nullptr) {         \
-            *ec = static_cast<int>(top::state_accessor::error::xerrc_t::invalid_state_accessor_handle); \
+            convert_to(make_error_code(top::state_accessor::error::xerrc_t::invalid_state_accessor_handle), *ec); \
         }                            \
         return ret;                  \
     }                                \
                                      \
     if (property_name == nullptr) {  \
         if (ec != nullptr) {         \
-            *ec = static_cast<int>(state_accessor::error::xerrc_t::invalid_property_name);       \
+            convert_to(make_error_code(state_accessor::error::xerrc_t::invalid_property_name), *ec);       \
         }                            \
         return ret;                  \
     }                                \
                                      \
-    auto * state_accessor = reinterpret_cast<top::state_accessor::xstate_accessor_t *>(state_accessor_handle); \
+    auto * state_accessor = reinterpret_cast<top::state_accessor::xstate_accessor_t *>(state_accessor_handle);    \
     state_accessor::properties::xtypeless_property_identifier_t property_id{property_name, state_accessor::properties::xproperty_category_t::user}; \
     std::error_code e;               \
                                      \
-    ret = state_accessor->get_property<properties::xproperty_type_t::INT>(property_id, e);       \
+    ret = state_accessor->get_property<properties::xproperty_type_t::INT>(property_id, e);                 \
     if (e) {                         \
         if (ec != nullptr) {         \
-            *ec = e.value();         \
+            convert_to(e, *ec);      \
         }                            \
         return ret;                  \
     }                                \
@@ -185,7 +214,7 @@ DEFINE_GET_INT_PROPERTY(uint64)
 
 #undef DEFINE_GET_INT_PROPERTY
 
-xbytes_data_t get_property_bytes(void * state_accessor_handle, char const * property_name, int * ec) {
+xbytes_data_t get_property_bytes(void * state_accessor_handle, char const * property_name, xerror_code_t * ec) {
     using namespace top::state_accessor;
 
     xbytes_data_t ret;
@@ -194,14 +223,14 @@ xbytes_data_t get_property_bytes(void * state_accessor_handle, char const * prop
 
     if (state_accessor_handle == nullptr) {
         if (ec != nullptr) {
-            *ec = static_cast<int>(top::state_accessor::error::xerrc_t::invalid_state_accessor_handle);
+            convert_to(make_error_code(top::state_accessor::error::xerrc_t::invalid_state_accessor_handle), *ec);
         }
         return ret;
     }
 
     if (property_name == nullptr) {
         if (ec != nullptr) {
-            *ec = static_cast<int>(state_accessor::error::xerrc_t::invalid_property_name);
+            convert_to(make_error_code(state_accessor::error::xerrc_t::invalid_property_name), *ec);
         }
         return ret;
     }
@@ -213,7 +242,7 @@ xbytes_data_t get_property_bytes(void * state_accessor_handle, char const * prop
     auto bytes = state_accessor->get_property<properties::xproperty_type_t::bytes>(property_id, e);
     if (e) {
         if (ec != nullptr) {
-            *ec = e.value();
+            convert_to(e, *ec);
         }
         return ret;
     }
@@ -225,26 +254,26 @@ xbytes_data_t get_property_bytes(void * state_accessor_handle, char const * prop
     return ret;
 }
 
-void set_property_bytes(void * state_accessor_handle, char const * property_name, xbytes_data_t const * property_data, int * ec) {
+void set_property_bytes(void * state_accessor_handle, char const * property_name, xbytes_data_t const * property_data, xerror_code_t * ec) {
     using namespace top::state_accessor;
 
     if (state_accessor_handle == nullptr) {
         if (ec != nullptr) {
-            *ec = static_cast<int>(top::state_accessor::error::xerrc_t::invalid_state_accessor_handle);
+            convert_to(make_error_code(top::state_accessor::error::xerrc_t::invalid_state_accessor_handle), *ec);
         }
         return;
     }
 
     if (property_name == nullptr) {
         if (ec != nullptr) {
-            *ec = static_cast<int>(state_accessor::error::xerrc_t::invalid_property_name);
+            convert_to(make_error_code(state_accessor::error::xerrc_t::invalid_property_name), *ec);
         }
         return;
     }
 
     if (property_data == nullptr) {
         if (ec != nullptr) {
-            *ec = static_cast<int>(state_accessor::error::xerrc_t::invalid_property_value);
+            convert_to(make_error_code(state_accessor::error::xerrc_t::invalid_property_value), *ec);
         }
         return;
     }
@@ -257,7 +286,7 @@ void set_property_bytes(void * state_accessor_handle, char const * property_name
     state_accessor->set_property<properties::xproperty_type_t::bytes>(property_id, bytes, e);
     if (e) {
         if (ec != nullptr) {
-            *ec = e.value();
+            convert_to(e, *ec);
         }
         return;
     }
