@@ -11,18 +11,18 @@ pub struct PropertyObject{
 }
 
 #[repr(C)]
-pub struct CBytes {
+pub struct CBytesSlice {
     pub ptr: *const u8,
     pub size: u64,
 }
 
-impl Drop for CBytes {
+impl Drop for CBytesSlice {
     fn drop(&mut self) {
         unsafe { free_bytes(self)}
     }
 }
 
-impl Deref for CBytes {
+impl Deref for CBytesSlice {
     type Target = [u8];
 
     fn deref(&self) -> &[u8] {

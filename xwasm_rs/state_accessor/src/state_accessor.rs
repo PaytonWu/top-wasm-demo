@@ -1,8 +1,8 @@
 use std::os::raw::c_void;
-use types::fundamental::{Symbol, Token};
+use types::fundamental::{Error, Symbol, Token};
 use crate::StateAccessorTrait;
 use std::ffi::{CString};
-use ffi::state_accessor::{Bytes, CBytes};
+use ffi::state_accessor::{Bytes, CBytesSlice};
 
 #[repr(C)]
 #[derive(Debug)]
@@ -30,7 +30,20 @@ impl StateAccessorTrait for StateAccessor {
         }
     }
 
-    fn get_property_bytes(&self, property_name: &str) -> Result<CBytes, types::fundamental::Error> {
+    fn deposit(&self, property_name: &str, token: Token) -> Result<(), Error> {
+        let property_name_string = CString::new(property_name).map_err(|nul_error| types::fundamental::Error::new(nul_error.nul_position() as i32, nul_error.to_string().as_str(), "NulError"));
+        let symbol_string = CString::new(token.symbol().value().as_str()).map_err(|nul_error| types::fundamental::Error::new(nul_error.nul_position() as i32, nul_error.to_string().as_str(), "NulError"));
+        let mut ec = ffi::state_accessor::CErrorCode::ok();
+
+        unsafe { ffi::state_accessor::deposit(self.handle, property_name_string?.as_ptr(), token.amount(), symbol_string?.as_ptr(), &mut ec) };
+        if ec.value != 0 {
+            Err(types::fundamental::Error::from(&ec))
+        } else {
+            Ok(())
+        }
+    }
+
+    fn get_property_bytes(&self, property_name: &str) -> Result<CBytesSlice, types::fundamental::Error> {
         let property_name_string = CString::new(property_name).map_err(|nul_error| types::fundamental::Error::new(nul_error.nul_position() as i32, nul_error.to_string().as_str(),"NulError"));
         let mut ec = ffi::state_accessor::CErrorCode::ok();
 
