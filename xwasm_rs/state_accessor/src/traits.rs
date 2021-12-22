@@ -6,4 +6,6 @@ pub trait StateAccessorTrait {
     fn deposit(&self, property_name: &str, token: Token) -> Result<(), types::fundamental::Error>;
     fn get_property_bytes(&self, property_name: &str) -> Result<CBytesSlice, types::fundamental::Error>;
     fn set_property_bytes(&self, property_name: &str, bytes: &Bytes) -> Result<(), types::fundamental::Error>;
+    // fn get_property_u64(&self, property_name: &str) -> Result<u64, types::fundamental::Error>;
+    // fn set_property_u64(&self, property_name: &str, value: u64) -> Result<(), types::fundamental::Error>;
 }
